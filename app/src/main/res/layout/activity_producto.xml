@@ -40,7 +40,7 @@
             android:layout_height="0dp"
             android:layout_weight="0.5"
             android:text="EJEMPLO PRECIO" />
-        
+
         <!-- TextView con la calificación -->
         <TextView
             android:gravity="center"
