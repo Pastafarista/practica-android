@@ -13,7 +13,9 @@ import com.example.comunicacion.model.Producto
 
 class ProductosAdapter(var context: Context) :
     RecyclerView.Adapter<ProductosAdapter.MyHolder>() {
-    var listaDatos: ArrayList<Producto> = ArrayList()
+
+    var listaDatos: ArrayList<Producto> = ArrayList() // Lista de productos
+    var listaFiltrada: ArrayList<Producto> = ArrayList() // Lista de productos filtrados
 
     class MyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imagen: ImageView = itemView.findViewById(R.id.imagenFila)
@@ -29,14 +31,13 @@ class ProductosAdapter(var context: Context) :
     }
 
     // numero de elementos - filas que se tienen que pintar
-    // TODO necesitare una lista de elementos!!
     override fun getItemCount(): Int {
-        return listaDatos.size
+        return listaFiltrada.size
     }
 
     // asociar datos con plantilla
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
-        val producto = listaDatos[position]
+        val producto = listaFiltrada[position]
 
         holder.titulo.setText(producto.title)
         holder.subTitulo.setText(producto.price.toString())
@@ -47,13 +48,25 @@ class ProductosAdapter(var context: Context) :
     }
 
     fun addProducto(producto: Producto) {
+
+        // Añadir el producto a las dos listas
         listaDatos.add(producto)
-        //notifyDataSetChanged()
+        listaFiltrada.add(producto)
+
         notifyItemInserted(listaDatos.size - 1)
     }
 
-    // Función que devuelve la lista de productos
-    fun getListaProductos(): ArrayList<Producto> {
-        return listaDatos
+    // Función que filtra los productos por categoría
+    fun filtrarPorCategoria(categoria: String) {
+
+        listaFiltrada.clear()
+
+        for (producto in listaDatos) {
+            if (producto.category == categoria) {
+                listaFiltrada.add(producto)
+            }
+        }
+
+        notifyDataSetChanged()
     }
 }

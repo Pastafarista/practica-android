@@ -31,11 +31,11 @@ class MainActivity : AppCompatActivity() {
     // Variables
     private lateinit var binding: ActivityMainBinding
     private lateinit var adaptadoProducto: ProductosAdapter
-    private lateinit var adaptadorMarcas: ArrayAdapter<String>
+    private lateinit var adaptadorCategorias: ArrayAdapter<String>
     private lateinit var correo: String
     private var perfil: Char? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -68,8 +68,8 @@ class MainActivity : AppCompatActivity() {
             ) {
                 val seleccion = parent!!.adapter.getItem(position) as String
 
-                Snackbar.make(binding.root, "Has seleccionado $seleccion", Snackbar.LENGTH_LONG).show()
-
+                // Filtrar los productos por categoría
+                adaptadoProducto.filtrarPorCategoria(seleccion)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
                 // Añadir la categoría al spinner
                 if (!categorias_repetidas.contains(producto.category)){
                     categorias_repetidas.add(producto.category)
-                    adaptadorMarcas.add(producto.category)
+                    adaptadorCategorias.add(producto.category)
                 }
 
             }
@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity() {
         val categorias: ArrayList<String> = ArrayList<String>()
 
         // Crear el adaptador de las categorías
-        adaptadorMarcas = ArrayAdapter(
+        adaptadorCategorias = ArrayAdapter(
             applicationContext,
             android.R.layout.simple_spinner_item,
             categorias
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun personalizarSpinner(){
-        adaptadorMarcas.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinnerMarca.adapter = adaptadorMarcas
+        adaptadorCategorias.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerMarca.adapter = adaptadorCategorias
     }
 }
