@@ -2,59 +2,56 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="6dp">
+    android:layout_height="match_parent"
+    tools:context=".ProductoActivity">
 
-    <ImageView
-        android:id="@+id/imagenFila"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+    <TextView
+        android:id="@+id/tituloProducto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Producto"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/imagenProducto"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tituloProducto" />
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imagenFila"
-        app:layout_constraintTop_toTopOf="parent">
+    <TextView
+        android:id="@+id/descripcionProducto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Descripcion"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagenProducto" />
 
-        <!-- TextView con el título -->
-        <TextView
-            android:gravity="center"
-            android:id="@+id/tituloFila"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:text="EJEMPLO TITULO" />
+    <TextView
+        android:id="@+id/categoriaProducto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Categoría"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descripcionProducto" />
 
-        <!-- TextView con el precio -->
-        <TextView
-            android:gravity="center"
-            android:id="@+id/subtituloFila"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:text="EJEMPLO PRECIO" />
-
-        <!-- TextView con la calificación -->
-        <TextView
-            android:gravity="center"
-            android:id="@+id/calificacionFila"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:text="EJEMPLO CALIFICACION" />
-
-
-
-
-    </LinearLayout>
-
-
+    <TextView
+        android:id="@+id/precioProducto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Precio"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoriaProducto" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

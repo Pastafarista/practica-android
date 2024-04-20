@@ -1,5 +1,6 @@
 package com.example.comunicacion.ui.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
+import com.example.comunicacion.ProductoActivity
 
 import com.example.comunicacion.adapters.ProductosAdapter
 import com.example.comunicacion.databinding.ActivityMainBinding
@@ -91,7 +93,6 @@ class MainActivity : AppCompatActivity() {
                     categorias_repetidas.add(producto.category)
                     adaptadorCategorias.add(producto.category)
                 }
-
             }
         },{
             Log.wtf("ERROR", it.localizedMessage)
@@ -116,7 +117,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun personalizarRecycler(){
+        adaptadoProducto.setOnItemClickListener(object : ProductosAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+
+                val intent = Intent(this@MainActivity, ProductoActivity::class.java)
+                intent.putExtra("titulo", adaptadoProducto.listaFiltrada[position].title)
+                intent.putExtra("descripcion", adaptadoProducto.listaFiltrada[position].description)
+                intent.putExtra("precio", adaptadoProducto.listaFiltrada[position].price.toString())
+                intent.putExtra("imagen", adaptadoProducto.listaFiltrada[position].image)
+                intent.putExtra("categoria", adaptadoProducto.listaFiltrada[position].category)
+
+                startActivity(intent)
+            }
+        })
+
         binding.recyclerModelos.adapter = adaptadoProducto
+
         binding.recyclerModelos.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }

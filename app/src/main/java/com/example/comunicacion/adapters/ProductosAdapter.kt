@@ -14,20 +14,37 @@ import com.example.comunicacion.model.Producto
 class ProductosAdapter(var context: Context) :
     RecyclerView.Adapter<ProductosAdapter.MyHolder>() {
 
+        private lateinit var listener: OnItemClickListener
+
+        interface OnItemClickListener {
+            fun onItemClick(position: Int)
+        }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.listener = listener
+    }
+
     var listaDatos: ArrayList<Producto> = ArrayList() // Lista de productos
     var listaFiltrada: ArrayList<Producto> = ArrayList() // Lista de productos filtrados
 
-    class MyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MyHolder(itemView: View, listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView) {
         var imagen: ImageView = itemView.findViewById(R.id.imagenFila)
         var titulo: TextView = itemView.findViewById(R.id.tituloFila)
         var subTitulo: TextView = itemView.findViewById(R.id.subtituloFila)
+
+        init {
+            itemView.setOnClickListener {
+                listener.onItemClick(adapterPosition)
+            }
+        }
+
     }
 
     // crear la plantilla de cada fila
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
         val view: View = LayoutInflater.from(context)
             .inflate(R.layout.item_recycler, parent, false)
-        return MyHolder(view)
+        return MyHolder(view, listener)
     }
 
     // numero de elementos - filas que se tienen que pintar
@@ -41,9 +58,9 @@ class ProductosAdapter(var context: Context) :
 
         holder.titulo.setText(producto.title)
         holder.subTitulo.setText(producto.price.toString())
-        //holder.imagen.setImageResource(R.drawable.vw)
+
         Glide.with(context).load(producto.image)
-            .placeholder(R.drawable.vw)
+            .placeholder(R.drawable.loading)
             .into(holder.imagen)
     }
 
