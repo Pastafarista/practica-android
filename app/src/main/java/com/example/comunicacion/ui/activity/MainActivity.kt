@@ -43,8 +43,6 @@ class MainActivity : AppCompatActivity() {
         // Realizar la petición JSON
         realizarPeticionJSON()
 
-
-
         // Saludar al usuario con el correo y su nombre de perfil
         correo = intent.getStringExtra("correo")!!
         perfil = intent.getStringExtra("perfil")!!.get(0)
