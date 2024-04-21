@@ -53,6 +53,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Introduce la contraseña"
+        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="@+id/textRegistro"
         app:layout_constraintStart_toStartOf="@+id/textRegistro"
         app:layout_constraintTop_toBottomOf="@+id/editCorreo" />
@@ -63,10 +64,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Repite la contraseña"
+        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="@+id/textRegistro"
         app:layout_constraintStart_toStartOf="@+id/textRegistro"
         app:layout_constraintTop_toBottomOf="@+id/editPass" />
-
 
     <Spinner
         android:entries="@array/perfiles"

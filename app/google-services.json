@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "861764917658",
+    "project_id": "practica-android-9f602",
+    "storage_bucket": "practica-android-9f602.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:861764917658:android:bc987c84c09a2534dc8223",
+        "android_client_info": {
+          "package_name": "com.example.comunicacion"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDZx3ReuH5Uwb_PVb9R_w7EVx7ndK19Jo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

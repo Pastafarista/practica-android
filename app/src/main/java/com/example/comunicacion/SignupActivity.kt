@@ -1,26 +1,53 @@
 package com.example.comunicacion
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.RadioButton
+import android.widget.Toast
 import com.example.comunicacion.databinding.ActivitySignupBinding
 import com.example.comunicacion.model.Usuario
+import com.example.comunicacion.ui.activity.MainActivity
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 class SignupActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignupBinding
+
+    private lateinit var auth: FirebaseAuth
+
+    public override fun onStart() {
+        super.onStart()
+        // Check if user is signed in (non-null) and update UI accordingly.
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            reload()
+        }
+    }
+
+    private fun reload() {
+        // go to main activity
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        auth = Firebase.auth
+
         binding.botonRegistrar.setOnClickListener {
 
             if (binding.editNombre.text.isNotEmpty() && binding.editCorreo.text.isNotEmpty()
                 && binding.editPass.text.isNotEmpty() && binding.editPass2.text.isNotEmpty()
-                && (binding.editPass.text.toString().equals(binding.editPass2.text.toString()))
+                && binding.editPass.text.toString() == binding.editPass2.text.toString()
+                && binding.editPass.text.length >= 6
+                && binding.editCorreo.text.contains("@") && binding.editCorreo.text.contains(".")
             ) {
                 // realizar cambio pasando un objeto de tipo usuario
                 // val perfil = binding.spinnerPerfil.selectedItem.toString()
@@ -40,23 +67,53 @@ class SignupActivity : AppCompatActivity() {
                         radioSeleccionado.text.toString()
                     )
 
-                val intent: Intent = Intent(this, LoginActivity::class.java)
-                intent.putExtra("usuario", usuario)
-                startActivity(intent)
-                finish()
-            } else {
-                Snackbar.make(binding.root, "Fallo en el proceso", Snackbar.LENGTH_SHORT).show()
+                auth.createUserWithEmailAndPassword(usuario.correo, usuario.pass)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success")
+                            Toast.makeText(
+                                baseContext,
+                                "Authentication success.",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+
+                            val user = auth.currentUser
+
+                            val intent: Intent = Intent(this, LoginActivity::class.java)
+                            intent.putExtra("usuario", usuario)
+                            startActivity(intent)
+                            finish()
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                            Toast.makeText(
+                                baseContext,
+                                "Error al crear el usuario en la base de datos",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
+                    }
+
+            } else if (binding.editPass.text.length < 6) {
+                Snackbar.make(binding.root, "La contraseña debe tener al menos 6 caracteres", Snackbar.LENGTH_SHORT).show()
+            }
+            else if (binding.editPass.text.toString() != binding.editPass2.text.toString()) {
+                Snackbar.make(binding.root, "Las contraseñas no coinciden", Snackbar.LENGTH_SHORT).show()
+            }
+            else if (binding.editNombre.text.isEmpty() || binding.editCorreo.text.isEmpty()
+                || binding.editPass.text.isEmpty() || binding.editPass2.text.isEmpty()) {
+                Snackbar.make(binding.root, "Falta un campo", Snackbar.LENGTH_SHORT).show()
+            }
+            else if (!binding.editCorreo.text.contains("@") || !binding.editCorreo.text.contains(".")) {
+                Snackbar.make(binding.root, "Correo inválido", Snackbar.LENGTH_SHORT).show()
+            }
+            else {
+                Snackbar.make(binding.root, "Error desconconcido", Snackbar.LENGTH_SHORT).show()
             }
 
         }
 
     }
 }
-
-/*
-* Crear una tercera pantalla a la cual puedo navegar si
-* en el login hay usuario y contraseña
-* En la 3a pantalla aparecerá un mensaje con el correo y
-* una inicial (A, U , I). En el caso de no poder detectar el
-* perfil, pondrá una ?
-* */
