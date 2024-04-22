@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
@@ -65,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                Snackbar.make(binding.root, "No has seleccionado nada", Snackbar.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, "No se ha seleccionado nada", Toast.LENGTH_SHORT).show()
             }
         }
     }

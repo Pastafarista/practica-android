@@ -97,20 +97,40 @@ class SignupActivity : AppCompatActivity() {
                     }
 
             } else if (binding.editPass.text.length < 6) {
-                Snackbar.make(binding.root, "La contraseña debe tener al menos 6 caracteres", Snackbar.LENGTH_SHORT).show()
+                Toast.makeText(
+                    baseContext,
+                    "La contraseña debe tener al menos 6 caracteres",
+                    Toast.LENGTH_SHORT,
+                ).show()
             }
             else if (binding.editPass.text.toString() != binding.editPass2.text.toString()) {
-                Snackbar.make(binding.root, "Las contraseñas no coinciden", Snackbar.LENGTH_SHORT).show()
+                Toast.makeText(
+                    baseContext,
+                    "Las contraseñas no coinciden",
+                    Toast.LENGTH_SHORT,
+                ).show()
             }
             else if (binding.editNombre.text.isEmpty() || binding.editCorreo.text.isEmpty()
                 || binding.editPass.text.isEmpty() || binding.editPass2.text.isEmpty()) {
-                Snackbar.make(binding.root, "Falta un campo", Snackbar.LENGTH_SHORT).show()
+                Toast.makeText(
+                    baseContext,
+                    "Debes llenar todos los campos",
+                    Toast.LENGTH_SHORT,
+                ).show()
             }
             else if (!binding.editCorreo.text.contains("@") || !binding.editCorreo.text.contains(".")) {
-                Snackbar.make(binding.root, "Correo inválido", Snackbar.LENGTH_SHORT).show()
+                Toast.makeText(
+                    baseContext,
+                    "Correo inválido",
+                    Toast.LENGTH_SHORT,
+                ).show()
             }
             else {
-                Snackbar.make(binding.root, "Error desconconcido", Snackbar.LENGTH_SHORT).show()
+                Toast.makeText(
+                    baseContext,
+                    "Error desconocido",
+                    Toast.LENGTH_SHORT,
+                ).show()
             }
 
         }

@@ -65,7 +65,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
                 if (binding.editUser.text.toString().isNotEmpty() && binding.editPass.text.toString().isNotEmpty())
                 {
-
                     auth.signInWithEmailAndPassword(binding.editUser.text.toString(), binding.editPass.text.toString())
                         .addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
@@ -76,6 +75,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
                                 val intent: Intent = Intent(applicationContext, MainActivity::class.java)
                                 intent.putExtra("correo", binding.editUser.text.toString())
+
                                 if (usuario!=null){
                                     //intent.putExtra("correo", usuario!!.correo)
                                     intent.putExtra("perfil", usuario!!.perfil)
@@ -95,7 +95,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                             }
                         }
                 } else {
-                    Snackbar.make(binding.root, "Fallo en la auth", Snackbar.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        baseContext,
+                        "Debes rellenar todos los campos",
+                        Toast.LENGTH_SHORT,
+                    ).show()
                 }
 
 
