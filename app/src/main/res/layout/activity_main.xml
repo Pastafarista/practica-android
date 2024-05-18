@@ -7,7 +7,6 @@
     android:padding="24dp"
     tools:context=".ui.activity.MainActivity">
 
-
     <TextView
         android:id="@+id/textoSaludo"
         android:layout_width="wrap_content"

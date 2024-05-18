@@ -18,7 +18,6 @@ import com.google.firebase.auth.auth
 class SignupActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignupBinding
-
     private lateinit var auth: FirebaseAuth
 
     public override fun onStart() {

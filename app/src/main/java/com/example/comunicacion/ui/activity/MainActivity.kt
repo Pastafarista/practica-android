@@ -10,20 +10,23 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.Volley
 import com.example.comunicacion.ProductoActivity
 
 import com.example.comunicacion.adapters.ProductosAdapter
 import com.example.comunicacion.databinding.ActivityMainBinding
 import com.example.comunicacion.model.Producto
-import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
-import org.json.JSONArray
 
 class MainActivity : AppCompatActivity() {
 
     // Variables
+    private lateinit var database: FirebaseDatabase
     private lateinit var binding: ActivityMainBinding
     private lateinit var adaptadoProducto: ProductosAdapter
     private lateinit var adaptadorCategorias: ArrayAdapter<String>
@@ -37,14 +40,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Instanciar los adaptadores y las listas
-        instancias()
+       instancias()
 
         // Personalizar el spinner y el recycler
         personalizarSpinner()
         personalizarRecycler()
 
-        // Realizar la petición JSON
-        realizarPeticionJSON()
+        // Rellena el adaptador de productos
+        getProductos()
 
         // Saludar al usuario con el correo y su nombre de perfil
         correo = intent.getStringExtra("correo")!!
@@ -52,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         binding.textoSaludo.setText("Bienvenido $correo")
         binding.textoPerfil.setText("$perfil")
 
+        // Listener del spinner para filtrar los productos por categoría
         binding.spinnerMarca.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -71,40 +75,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun realizarPeticionJSON() {
-
-        // URL de la API
-        val url = "https://fakestoreapi.com/products"
-
+    // Obtener los productos de la base de datos
+    fun getProductos() {
         var categorias_repetidas: ArrayList<String> = ArrayList<String>()
 
-        // crear la peticion
-        val peticion: JsonArrayRequest = JsonArrayRequest(url,{
-            val productos_json: JSONArray = it
+        // Obtenemos los objetos de la base de datos
+        database.getReference("products").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (data in snapshot.children) {
+                    try{
+                        // Convertimos el objeto snapshot de firebase a un objeto de tipo Producto
+                        val producto = data.getValue(Producto::class.java)!!
 
-            for (i in 0..productos_json.length() - 1){
-                val productoJSON = productos_json.getJSONObject(i)
-                var producto = Gson().fromJson(productoJSON.toString(), Producto::class.java)
+                        // Rellenamos el adaptador de productos
+                        adaptadoProducto.addProducto(producto)
 
-                // Añadir el producto al adaptador
-                adaptadoProducto.addProducto(producto)
+                        // Rellenamos el adaptador de categorías
+                        if (!categorias_repetidas.contains(producto.category)){
+                            categorias_repetidas.add(producto.category)
+                            adaptadorCategorias.add(producto.category)
+                        }
 
-                // Añadir la categoría al spinner
-                if (!categorias_repetidas.contains(producto.category)){
-                    categorias_repetidas.add(producto.category)
-                    adaptadorCategorias.add(producto.category)
+                    } catch (e: Exception){
+                        e.message?.let { Log.e("ERROR", it) }
+                    }
                 }
             }
-        },{
-            Log.wtf("ERROR", it.localizedMessage)
-        })
 
-        // lanzar la peticion
-        Volley.newRequestQueue(applicationContext).add(peticion)
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("ERROR", error.message)
+            }
+        })
     }
 
     // Instanciar el adaptador de productos y el adaptador de marcas
     fun instancias(){
+        database = FirebaseDatabase.getInstance("https://practica-android-9f602-default-rtdb.europe-west1.firebasedatabase.app/")
+
         adaptadoProducto = ProductosAdapter(this)
 
         val categorias: ArrayList<String> = ArrayList<String>()

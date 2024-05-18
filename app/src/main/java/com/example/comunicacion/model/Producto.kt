@@ -1,4 +1,5 @@
 package com.example.comunicacion.model
+import java.io.Serializable
 
 class Producto(
     var id: Int,
@@ -8,4 +9,5 @@ class Producto(
     var category: String,
     var image: String
 ) {
+    constructor() : this(0, "", "", 0.0, "", "")
 }

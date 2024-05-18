@@ -1,6 +1,5 @@
 package com.example.comunicacion.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.comunicacion.R
 import com.example.comunicacion.model.Producto
+import com.example.comunicacion.ui.activity.MainActivity
 
-class ProductosAdapter(var context: Context) :
+class ProductosAdapter(var context: MainActivity) :
     RecyclerView.Adapter<ProductosAdapter.MyHolder>() {
 
         private lateinit var listener: OnItemClickListener
