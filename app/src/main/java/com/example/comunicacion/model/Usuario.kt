@@ -8,4 +8,6 @@ class Usuario(
     var pass: String,
     var perfil: String,
     var genero: String
-) : Serializable {}
+) : Serializable {
+    constructor() : this("", "", "", "", "")
+}

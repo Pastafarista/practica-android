@@ -15,6 +15,7 @@ import com.example.comunicacion.ProductoActivity
 import com.example.comunicacion.adapters.ProductosAdapter
 import com.example.comunicacion.databinding.ActivityMainBinding
 import com.example.comunicacion.model.Producto
+import com.example.comunicacion.model.Usuario
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -50,10 +51,18 @@ class MainActivity : AppCompatActivity() {
         getProductos()
 
         // Saludar al usuario con el correo y su nombre de perfil
-        correo = intent.getStringExtra("correo")!!
-        perfil = intent.getStringExtra("perfil")!!.get(0)
-        binding.textoSaludo.setText("Bienvenido $correo")
-        binding.textoPerfil.setText("$perfil")
+        val id = intent.getStringExtra("userId")
+
+        // Obtener el correo y el perfil del usuario de la base de datos
+        database.getReference("users").child(id!!).get().addOnSuccessListener {
+            val user = it.getValue(Usuario::class.java)!!
+
+            // Mostramos el texto de saludo y la incial del perfil
+            binding.textoSaludo.text = "Hola ${user.nombre}!"
+            binding.textoPerfil.text = user.nombre[0].toString().toUpperCase()
+        }.addOnFailureListener {
+            Log.e("ERROR", it.message.toString())
+        }
 
         // Listener del spinner para filtrar los productos por categoría
         binding.spinnerMarca.onItemSelectedListener = object : OnItemSelectedListener {

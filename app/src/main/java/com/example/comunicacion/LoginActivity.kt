@@ -2,11 +2,13 @@ package com.example.comunicacion
 
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 
 import com.example.comunicacion.databinding.ActivityLoginBinding
 import com.example.comunicacion.model.Usuario
@@ -15,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import java.util.Base64
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -51,6 +54,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onClick(v: View?) {
         when (v!!.id) {
             binding.buttonSignUp.id -> {
@@ -71,17 +75,10 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithEmail:success")
 
-                                val user = auth.currentUser
-
+                                // Pasamos a la actividad principal
+                                val userId = Base64.getEncoder().encodeToString(binding.editUser.text.toString().toByteArray())
                                 val intent: Intent = Intent(applicationContext, MainActivity::class.java)
-                                intent.putExtra("correo", binding.editUser.text.toString())
-
-                                if (usuario!=null){
-                                    //intent.putExtra("correo", usuario!!.correo)
-                                    intent.putExtra("perfil", usuario!!.perfil)
-                                } else {
-                                    intent.putExtra("perfil", "?")
-                                }
+                                intent.putExtra("userId", userId)
                                 startActivity(intent)
 
                             } else {

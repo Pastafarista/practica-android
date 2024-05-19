@@ -2,18 +2,20 @@ package com.example.comunicacion
 
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.example.comunicacion.databinding.ActivitySignupBinding
 import com.example.comunicacion.model.Usuario
-import com.example.comunicacion.ui.activity.MainActivity
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.database.database
+import java.util.Base64
 
 class SignupActivity : AppCompatActivity() {
 
@@ -77,7 +79,8 @@ class SignupActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT,
                             ).show()
 
-                            val user = auth.currentUser
+                            // Añadimos el usuario a la base de datos
+                            registerUserFirebase(usuario)
 
                             val intent: Intent = Intent(this, LoginActivity::class.java)
                             intent.putExtra("usuario", usuario)
@@ -131,8 +134,19 @@ class SignupActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT,
                 ).show()
             }
-
         }
+    }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun registerUserFirebase(usuario: Usuario) {
+        // Nos conectamos a la base de datos de Firebase
+        val database = Firebase.database("https://practica-android-9f602-default-rtdb.europe-west1.firebasedatabase.app/")
+        val myRef = database.getReference("users")
+
+        // El id será el email en formato base64
+        val id = Base64.getEncoder().encodeToString(usuario.correo.toByteArray())
+
+        // Añadimos el usuario a la base de datos
+        myRef.child(id).setValue(usuario)
     }
 }
